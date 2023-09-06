@@ -1,38 +1,44 @@
 package ru.smartjava.springjdbc.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import ru.smartjava.springjdbc.entity.Order;
 
 import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
 public class RepositoryImpl implements JDBCRepository {
 
-    private final DataSource dataSource;
+    @PersistenceContext
+    private final EntityManager entityManager;
 
-    private final String queryTemplate;
+    private final String queryProductTemplate;
+//    private final String queryCustomerTemplate;
 
-    private final NamedParameterJdbcTemplate template;
-
-    public RepositoryImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-        this.template = new NamedParameterJdbcTemplate(dataSource);
-        this.queryTemplate = read("sql/getProductByName.sql");
+    public RepositoryImpl(EntityManager entityManager, DataSource dataSource) {
+        this.entityManager = entityManager;
+        this.queryProductTemplate = read("sql/getProductsByName.sql");
+//        this.queryCustomerTemplate = read("sql/getCustomerByName.sql");
     }
 
+
     @Override
-    public List<String> getProductByName(String name) {
-        Map<String, String> map = new HashMap<>(){{put("name", name);}};
-        return template.queryForList(queryTemplate, map, String.class);
+    public Optional<List<Order>> getProductByName(String name) {
+        List<Order> orderList = (List<Order>) entityManager.createNativeQuery(queryProductTemplate,
+                Order.class).setParameter("name", name).getResultList();
+        if (orderList.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(orderList);
+        }
     }
 
     private static String read(String scriptFileName) {

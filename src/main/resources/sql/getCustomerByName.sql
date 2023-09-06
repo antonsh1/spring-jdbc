@@ -1,0 +1,1 @@
+SELECT * FROM netology.customers WHERE name = :name

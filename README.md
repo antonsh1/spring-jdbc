@@ -1,9 +1,7 @@
-### Домашнее задание к занятию «8.3. JDBC API, JdbcTemplate, NamedParametersJdbcTemplate»
+### Домашнее задание к занятию «8.4. ORM, Hibernate»
 
-# Задача «Миграции*»
+# Две таблицы с Hibernate
 
-[Ссылка на задание](https://github.com/netology-code/jd-homeworks/blob/master/jdbc/task2/README.md)
+[Ссылка на задание](https://github.com/netology-code/jd-homeworks/blob/master/hibernate/task2/README.md)
 
-1. В докере задется только создание схемы  
-2. DDL применяется через [db.changelog-master.yaml](src%2Fmain%2Fresources%2Fsql%2Fdb.changelog-master.yaml)  
-3. Параметры liquibase задаются в [application.properties](src%2Fmain%2Fresources%2Fapplication.properties)  
+  
